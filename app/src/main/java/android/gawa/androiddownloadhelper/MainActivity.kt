@@ -1,10 +1,12 @@
 package android.gawa.androiddownloadhelper
 
 import android.gawa.androiddownloadhelper.component.settings.*
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import khttp.responses.Response
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,7 +16,9 @@ class MainActivity : AppCompatActivity() {
 
         helloWorldTxt.text = "Pawel Gawedzki"
 
-        var clickCounter : Int = 0
+        var clickCounter = 0
+
+        getRequest()
 
         downloadFavouritesBtn.setOnClickListener{
 
@@ -26,6 +30,18 @@ class MainActivity : AppCompatActivity() {
                 helloWorldTxt.text = appSetting.otherSetup.toString()
             }
             clickCounter++
+        }
+    }
+
+    fun getRequest() {
+        val response : Response = khttp.get(
+                url = "https://eztv.ag/api/get-torrents",
+                params = mapOf("limit" to "10", "page" to "1"))
+        if(response.statusCode == 200) {
+            val obj : JSONObject = response.jsonObject
+            println(obj["someProperty"])
+        } else {
+            println("Response code: ${response.statusCode}")
         }
     }
 }
