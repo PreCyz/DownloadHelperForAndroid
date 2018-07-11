@@ -7,7 +7,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        helloWorldTxt.text = "Pawel Gawedzki"
+        helloWorldTxt.text = "Press button to download favourites"
 
 
         downloadFavouritesBtn.setOnClickListener {
@@ -26,15 +29,26 @@ class MainActivity : AppCompatActivity() {
             val url = "https://eztv.ag/api/get-torrents"
             val params = mapOf("limit" to "2", "page" to "1")
 
-            val response = async {
-                WebClient().getRequest(url, params)
+            launch(UI) {
+                val titles = async(CommonPool) {
+                    try {
+                        getTitles(url, params)
+                    } catch (ex: Exception) {
+                        println(ex)
+                        ex.message
+                    }
+                }.await()
+                helloWorldTxt.text = titles
             }
 
-            val titles = TorrentResponseMapper().map(response.await())
-
-            helloWorldTxt.text = titles.torrents.joinToString(",") { torrentDetail -> torrentDetail.title }
-            /*helloWorldTxt.text = appSetting.apiSetup.toString()
-            helloWorldTxt.text = appSetting.otherSetup.toString()*/
+            //helloWorldTxt.text = appSetting.apiSetup.toString()
+            //helloWorldTxt.text = appSetting.otherSetup.toString()
         }
+    }
+
+    private fun getTitles(url: String, params: Map<String, String>): String {
+        val response = WebClient().getRequest(url, params)
+        val torrentResponse = TorrentResponseMapper().map(response)
+        return torrentResponse.torrents.joinToString(",\n") { torrentDetail -> torrentDetail.title }
     }
 }

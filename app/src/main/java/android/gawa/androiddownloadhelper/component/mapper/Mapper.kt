@@ -12,16 +12,11 @@ interface Mapper {
 
 class TorrentResponseMapper : Mapper {
 
-    operator fun JSONArray.iterator(): Iterator<JSONObject> = (0 until length()).asSequence()
-            .map { get(it) as JSONObject }
-            .iterator()
-
     override fun map(response: Response): TorrentResponse {
         val jsonObj = response.jsonObject
         val torrentArray = jsonObj["torrents"] as JSONArray
         val torrents =  mutableListOf<TorrentDetail>()
-        for (obj : Any in torrentArray.iterator().toList()) {
-            val jsonObject = obj as JSONObject
+        for (jsonObject : JSONObject in jsonArrayToJsonObjectList(torrentArray)) {
             torrents.add(TorrentDetail(
                     jsonObject.getLong("id"),
                     jsonObject.getString("hash"),
@@ -49,9 +44,11 @@ class TorrentResponseMapper : Mapper {
         )
     }
 
-    private fun <T> Iterator<T>.toList(): List<T> =
-            ArrayList<T>().apply {
-                while (hasNext())
-                    this += next()
-            }
+    private fun jsonArrayToJsonObjectList(jsonArray: JSONArray): List<JSONObject> {
+        val list = mutableListOf<JSONObject>()
+        for (i: Int in 0..(jsonArray.length() - 1)) {
+            list.add(jsonArray.getJSONObject(i))
+        }
+        return list
+    }
 }
