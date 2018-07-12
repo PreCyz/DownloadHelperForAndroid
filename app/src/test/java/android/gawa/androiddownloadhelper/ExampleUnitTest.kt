@@ -4,8 +4,6 @@ import android.gawa.androiddownloadhelper.component.mapper.TorrentResponseMapper
 import android.gawa.androiddownloadhelper.component.web.WebClient
 import khttp.responses.Response
 import org.hamcrest.core.IsEqual.equalTo
-import org.json.JSONArray
-import org.json.JSONObject
 import org.junit.Assert.*
 import org.junit.Test
 

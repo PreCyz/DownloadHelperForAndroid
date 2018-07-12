@@ -1,9 +1,7 @@
 package android.gawa.androiddownloadhelper
 
 import android.gawa.androiddownloadhelper.component.command.CommandResult
-import android.gawa.androiddownloadhelper.component.command.ConvertToTextCommand
 import android.gawa.androiddownloadhelper.component.command.DownloadDataCommand
-import android.gawa.androiddownloadhelper.component.settings.*
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,27 +17,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        helloWorldTxt.text = "Press button to download favourites"
-
-
         downloadFavouritesBtn.setOnClickListener {
 
-            val appSetting = AppSettings(ServerSetup(), ApiSetup(), RequestSetup(), FilterSetup(), OtherSetup())
-            Toast.makeText(this@MainActivity, "haha it works.", Toast.LENGTH_SHORT).show()
+            val numberOfTorrents = getNumberOfTorrents(torrentsNbr.text.toString())
 
-            val url = "https://eztv.ag/api/get-torrents"
-            val params = mapOf("limit" to "2", "page" to "1")
+            //val appSetting = AppSettings(ServerSetup(), ApiSetup(), RequestSetup(), FilterSetup(), OtherSetup())
+            Toast.makeText(this@MainActivity, "Downloading $numberOfTorrents torrents ", Toast.LENGTH_SHORT).show()
 
-            val convertToText = ConvertToTextCommand()
-            val downloadData = DownloadDataCommand(url, params)
-            downloadData.next(convertToText)
-            val commandResult = CommandResult()
+            val downloadData = DownloadDataCommand(numberOfTorrents)
 
             launch(UI) {
                 val titles = async(CommonPool) {
                     try {
+                        val commandResult = CommandResult()
                         downloadData.execute(commandResult)
-                        commandResult.titles
+                        commandResult.titles(if (numberOfTorrents < 35) numberOfTorrents else 35)
                     } catch (ex: Exception) {
                         println(ex)
                         ex.message
@@ -47,9 +39,12 @@ class MainActivity : AppCompatActivity() {
                 }.await()
                 helloWorldTxt.text = titles
             }
-
-            //helloWorldTxt.text = appSetting.apiSetup.toString()
-            //helloWorldTxt.text = appSetting.otherSetup.toString()
         }
+        downloadFavouritesBtn.requestFocus()
+    }
+
+    private fun getNumberOfTorrents(torrentsNumber: String): Int {
+        return if (torrentsNumber.isEmpty()) 100
+        else torrentsNumber.toInt()
     }
 }
