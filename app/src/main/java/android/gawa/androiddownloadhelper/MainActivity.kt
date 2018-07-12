@@ -13,6 +13,8 @@ import kotlinx.coroutines.experimental.launch
 
 class MainActivity : AppCompatActivity() {
 
+    private val titlesToShow = 20
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity() {
                     try {
                         val commandResult = CommandResult()
                         downloadData.execute(commandResult)
-                        commandResult.titles(if (numberOfTorrents < 35) numberOfTorrents else 35)
+                        commandResult.titles(getTitlesToShow(numberOfTorrents))
                     } catch (ex: Exception) {
                         println(ex)
                         ex.message
@@ -43,8 +45,9 @@ class MainActivity : AppCompatActivity() {
         downloadFavouritesBtn.requestFocus()
     }
 
-    private fun getNumberOfTorrents(torrentsNumber: String): Int {
-        return if (torrentsNumber.isEmpty()) 100
-        else torrentsNumber.toInt()
-    }
+    private fun getTitlesToShow(numberOfTorrents: Int) =
+            if (numberOfTorrents < titlesToShow) numberOfTorrents else titlesToShow
+
+    private fun getNumberOfTorrents(torrentsNumber: String): Int =
+        if (torrentsNumber.isEmpty()) 100 else torrentsNumber.toInt()
 }
