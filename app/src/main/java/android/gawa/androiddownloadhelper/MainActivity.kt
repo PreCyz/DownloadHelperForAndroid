@@ -1,8 +1,8 @@
 package android.gawa.androiddownloadhelper
 
-import android.gawa.androiddownloadhelper.component.CommandResult
-import android.gawa.androiddownloadhelper.component.ConvertToText
-import android.gawa.androiddownloadhelper.component.DownloadDataCommand
+import android.gawa.androiddownloadhelper.component.command.CommandResult
+import android.gawa.androiddownloadhelper.component.command.ConvertToTextCommand
+import android.gawa.androiddownloadhelper.component.command.DownloadDataCommand
 import android.gawa.androiddownloadhelper.component.settings.*
 import android.os.Bundle
 import android.widget.Toast
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
             val url = "https://eztv.ag/api/get-torrents"
             val params = mapOf("limit" to "2", "page" to "1")
 
-            val convertToText = ConvertToText()
+            val convertToText = ConvertToTextCommand()
             val downloadData = DownloadDataCommand(url, params)
             downloadData.next(convertToText)
             val commandResult = CommandResult()
