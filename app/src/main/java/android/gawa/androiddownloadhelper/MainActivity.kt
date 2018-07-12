@@ -1,8 +1,9 @@
 package android.gawa.androiddownloadhelper
 
-import android.gawa.androiddownloadhelper.component.mapper.TorrentResponseMapper
+import android.gawa.androiddownloadhelper.component.CommandResult
+import android.gawa.androiddownloadhelper.component.ConvertToText
+import android.gawa.androiddownloadhelper.component.DownloadDataCommand
 import android.gawa.androiddownloadhelper.component.settings.*
-import android.gawa.androiddownloadhelper.component.web.WebClient
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -29,10 +30,16 @@ class MainActivity : AppCompatActivity() {
             val url = "https://eztv.ag/api/get-torrents"
             val params = mapOf("limit" to "2", "page" to "1")
 
+            val convertToText = ConvertToText()
+            val downloadData = DownloadDataCommand(url, params)
+            downloadData.next(convertToText)
+            val commandResult = CommandResult()
+
             launch(UI) {
                 val titles = async(CommonPool) {
                     try {
-                        getTitles(url, params)
+                        downloadData.execute(commandResult)
+                        commandResult.titles
                     } catch (ex: Exception) {
                         println(ex)
                         ex.message
@@ -44,11 +51,5 @@ class MainActivity : AppCompatActivity() {
             //helloWorldTxt.text = appSetting.apiSetup.toString()
             //helloWorldTxt.text = appSetting.otherSetup.toString()
         }
-    }
-
-    private fun getTitles(url: String, params: Map<String, String>): String {
-        val response = WebClient().getRequest(url, params)
-        val torrentResponse = TorrentResponseMapper().map(response)
-        return torrentResponse.torrents.joinToString(",\n") { torrentDetail -> torrentDetail.title }
     }
 }
