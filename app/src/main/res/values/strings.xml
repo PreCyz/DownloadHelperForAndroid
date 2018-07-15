@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DownloadHelper</string>
+    <string name="response_limit_key">response_limit_key</string>
+    <integer name="default_response_limit">100</integer>
 </resources>

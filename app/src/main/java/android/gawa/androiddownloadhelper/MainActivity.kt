@@ -1,7 +1,8 @@
 package android.gawa.androiddownloadhelper
 
+import android.gawa.androiddownloadhelper.component.command.CommandFactory
 import android.gawa.androiddownloadhelper.component.command.CommandResult
-import android.gawa.androiddownloadhelper.component.command.DownloadDataCommand
+import android.gawa.androiddownloadhelper.component.settings.SettingUtils
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import kotlinx.coroutines.experimental.launch
 class MainActivity : AppCompatActivity() {
 
     private val titlesToShow = 20
+    private val settingUtils = SettingUtils(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,33 +23,42 @@ class MainActivity : AppCompatActivity() {
 
         downloadFavouritesBtn.setOnClickListener {
 
-            val numberOfTorrents = getNumberOfTorrents(torrentsNbr.text.toString())
+            var limit = settingUtils.readLimitFromSharedPreferences()
+            val newLimit = torrentsNbr.text.toString().toInt()
+
+            if (newLimit != limit) {
+                settingUtils.writeLimitToSharedPreferences(newLimit)
+                limit = newLimit
+            }
+
+            println("Limit from shared preferences: $limit")
 
             //val appSetting = AppSettings(ServerSetup(), ApiSetup(), RequestSetup(), FilterSetup(), OtherSetup())
-            Toast.makeText(this@MainActivity, "Downloading $numberOfTorrents torrents ", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity, "Downloading $limit torrents ", Toast.LENGTH_SHORT).show()
 
-            val downloadData = DownloadDataCommand(numberOfTorrents)
+            val command = CommandFactory().downloadAndFilterChain(limit)
 
             launch(UI) {
-                val titles = async(CommonPool) {
+                val result = async(CommonPool) {
+                    val commandResult = CommandResult()
                     try {
-                        val commandResult = CommandResult()
-                        downloadData.execute(commandResult)
-                        commandResult.titles(getTitlesToShow(numberOfTorrents))
+                        command.execute(commandResult)
+                        commandResult
                     } catch (ex: Exception) {
                         println(ex)
-                        ex.message
+                        commandResult.exMsg = ex.message
+                        commandResult
                     }
                 }.await()
-                helloWorldTxt.text = titles
+                if (!result.exMsg.isNullOrEmpty()) {
+                    helloWorldTxt.text = result.exMsg
+                }
+                else {
+                    helloWorldTxt.text = result.titles(titlesToShow)
+                }
             }
+
         }
         downloadFavouritesBtn.requestFocus()
     }
-
-    private fun getTitlesToShow(numberOfTorrents: Int) =
-            if (numberOfTorrents < titlesToShow) numberOfTorrents else titlesToShow
-
-    private fun getNumberOfTorrents(torrentsNumber: String): Int =
-        if (torrentsNumber.isEmpty()) 100 else torrentsNumber.toInt()
 }
