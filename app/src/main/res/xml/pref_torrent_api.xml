@@ -1,0 +1,41 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="@string/pref_torrent_api_url_value"
+        android:inputType="textCapWords"
+        android:key="@string/pref_torrent_api_url_key"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_torrent_api_url"
+        android:editable="false"/>
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_torrent_api_limit_value"
+        android:inputType="number"
+        android:key="@string/pref_torrent_api_limit_key"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_torrent_api_limit" />
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_torrent_api_page_value"
+        android:inputType="number"
+        android:key="@string/pref_torrent_api_page_key"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_torrent_api_page" />
+
+   <!-- <ListPreference
+        android:defaultValue="-1"
+        android:entries="@array/pref_example_list_titles"
+        android:entryValues="@array/pref_example_list_values"
+        android:key="example_list"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_add_friends_to_messages" />
+-->
+</PreferenceScreen>

@@ -1,25 +1,18 @@
 package android.gawa.androiddownloadhelper.component.command
 
+import android.content.Context
 import android.gawa.androiddownloadhelper.component.mapper.TorrentResponseMapper
+import android.gawa.androiddownloadhelper.component.settings.ApiSetup
 import android.gawa.androiddownloadhelper.component.web.WebClient
 
-internal class DownloadDataCommand(private val numberOfTorrents: Int, nextCommand: Command?) : AbstractCommand(nextCommand) {
+internal class DownloadDataCommand(context: Context, nextCommand: Command?) : AbstractCommand(nextCommand) {
 
-    private val url = "https://eztv.ag/api/get-torrents"
-    private val maxLimit = 100
+    private val apiSetup = ApiSetup(context)
 
     override fun execute(commandResult: CommandResult) {
-        val counter = 1 + (numberOfTorrents / maxLimit)
-        if (counter == 1 && numberOfTorrents % maxLimit == 0) {
-            return
-        }
-        for (i: Int in 1..counter) {
-            var limit = numberOfTorrents % maxLimit
-            if (i * 100 < numberOfTorrents) {
-                limit = maxLimit
-            }
-            val params = mapOf("limit" to limit.toString(), "page" to i.toString())
-            val response = WebClient().getRequest(url, params)
+        for (i: Int in 1..apiSetup.queryPage) {
+            val params = mapOf("limit" to apiSetup.queryLimit.toString(), "page" to i.toString())
+            val response = WebClient().getRequest(apiSetup.url, params)
             val torrentResponse = TorrentResponseMapper().map(response)
             commandResult.torrentResponses.add(torrentResponse)
         }

@@ -1,0 +1,37 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:inputType="number"
+        android:key="@string/pref_filter_torrent_age_key"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_filter_torrent_age" />
+
+    <EditTextPreference
+        android:inputType="number"
+        android:key="@string/pref_filter_max_file_size_key"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_filter_max_file_size" />
+
+    <EditTextPreference
+        android:inputType="date"
+        android:key="@string/pref_filter_release_date_key"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_filter_release_date" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/pref_filter_repeat_download_key"
+        android:title="@string/pref_filter_repeat_download" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="@string/pref_filter_handle_duplicates_key"
+        android:title="@string/pref_filter_handle_duplicates" />
+
+</PreferenceScreen>

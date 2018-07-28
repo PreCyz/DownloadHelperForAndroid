@@ -10,4 +10,6 @@ data class CommandResult(var exMsg: String? = "")  {
     fun titles(size: Int): String {
         return torrentResponses.flatMap { it -> it.torrents }.map { it -> it.title }.take(size).joinToString(",\n")
     }
+
+    fun titles() = torrentResponses.flatMap { it -> it.torrents }.map { it -> it.title }.toMutableList()
 }

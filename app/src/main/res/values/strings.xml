@@ -2,4 +2,76 @@
     <string name="app_name">DownloadHelper</string>
     <string name="response_limit_key">response_limit_key</string>
     <integer name="default_response_limit">100</integer>
+    <string name="title_settings">Settings</string>
+
+    <!-- Torrent API settings -->
+    <string name="pref_header_torrent_api">Torrent API</string>
+    <string name="pref_torrent_api_url">API URL</string>
+    <string name="pref_torrent_api_limit">Query limit</string>
+    <string name="pref_torrent_api_page">Query page</string>
+
+    <string name="pref_torrent_api_url_key">torrent_api_url</string>
+    <string name="pref_torrent_api_limit_key">torrent_api_limit</string>
+    <string name="pref_torrent_api_page_key">torrent_api_page</string>
+
+    <string name="pref_torrent_api_url_value">https://eztv.ag/api/get-torrents</string>
+    <string name="pref_torrent_api_limit_value">100</string>
+    <string name="pref_torrent_api_page_value">2</string>
+
+    <!-- Synology server setup -->
+    <string name="pref_header_server">Synology server</string>
+    <string name="pref_server_url">URL</string>
+    <string name="pref_server_protocol">Port</string>
+    <string name="pref_server_username">Username</string>
+    <string name="pref_server_password">Password</string>
+    <string name="pref_server_download_folder">Download folder</string>
+    <string name="pref_server_api_info">API info</string>
+    <string name="pref_server_task_creation_method">Task creation method</string>
+    <string name="pref_server_torrent_url_type">Torrent URL type</string>
+
+    <string name="pref_server_url_key">server_url</string>
+    <string name="pref_server_protocol_key">server_protocol</string>
+    <string name="pref_server_username_key">server_username</string>
+    <string name="pref_server_password_key">server_password</string>
+    <string name="pref_server_download_folder_key">server_download_folder</string>
+    <string name="pref_server_api_info_key">server_api_info</string>
+    <string name="pref_server_task_creation_method_key">server_task_creation_method</string>
+    <string name="pref_server_torrent_url_type_key">server_torrent_url_type</string>
+
+    <string name="pref_server_password_summary">Password is set</string>
+
+    <string-array name="pref_server_protocol_values">
+        <item>http</item>
+        <item>https</item>
+    </string-array>
+
+    <string-array name="pref_server_task_creation_method_values">
+        <item>REST</item>
+        <item>COPY FILE</item>
+    </string-array>
+
+    <string-array name="pref_server_torrent_url_type_values">
+        <item>torrent</item>
+        <item>magnet</item>
+    </string-array>
+
+    <!-- Filters settings -->
+    <string name="pref_header_filter">Filters</string>
+    <string name="pref_filter_torrent_age">Torrent age</string>
+    <string name="pref_filter_max_file_size">Max file size</string>
+    <string name="pref_filter_release_date">Release date</string>
+    <string name="pref_filter_repeat_download">Repeat download</string>
+    <string name="pref_filter_handle_duplicates">Handle duplicates</string>
+
+    <string name="pref_filter_torrent_age_key">filter_torrent_age</string>
+    <string name="pref_filter_max_file_size_key">filter_max_file_size</string>
+    <string name="pref_filter_release_date_key">filter_release_date</string>
+    <string name="pref_filter_repeat_download_key">filter_repeat_download</string>
+    <string name="pref_filter_handle_duplicates_key">filter_handle_duplicates</string>
+
+    <!-- Other settings -->
+    <string name="pref_header_other">Other</string>
+    <string name="pref_other_live_track_interval">Live track interval</string>
+    <string name="pref_other_live_track_interval_key">other_live_track_interval</string>
+
 </resources>
